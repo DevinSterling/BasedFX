@@ -1,7 +1,8 @@
 .add-base-container-button {
-    -fx-padding: 1em;
     -fx-background-radius: 0;
     -fx-pref-width: infinity;
+    -fx-font-weight: bold;
+    -fx-font-size: 2em
 }
 
 .base-controls-top {
@@ -108,6 +109,10 @@
 .base-field {
     -fx-cursor: hand;
     -fx-alignment: center;
+}
+
+.base-field:highlighted {
+    -fx-cursor: text;
 }
 
 .labeled-box {

@@ -1,4 +1,4 @@
-package com.devinsterling.basedfx.control.textfield;
+package com.devinsterling.basedfx.util.ui.textfield;
 
 import com.devinsterling.basedfx.util.StringUtil;
 

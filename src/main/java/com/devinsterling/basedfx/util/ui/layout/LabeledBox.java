@@ -1,4 +1,4 @@
-package com.devinsterling.basedfx.control.textfield;
+package com.devinsterling.basedfx.util.ui.layout;
 
 import javafx.scene.Node;
 import javafx.scene.control.Label;

@@ -1,6 +1,12 @@
-package com.devinsterling.basedfx.control;
+package com.devinsterling.basedfx.ui.layout;
 
-import javafx.beans.property.*;
+import com.devinsterling.basedfx.ui.control.BaseField;
+
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -41,15 +47,11 @@ public class BaseBox extends VBox {
     }
 
     private void updateCalculation() {
-        int value = baseField.valueProperty().get();
-        int base = baseField.baseProperty().get();
-        int exponent = exponentProperty.get();
-
         calculationProperty.set(
             BigInteger
-                .valueOf(base)
-                .pow(exponent)
-                .multiply(BigInteger.valueOf(value))
+                .valueOf(baseField.baseProperty().get())
+                .pow(exponentProperty.get())
+                .multiply(BigInteger.valueOf(baseField.valueProperty().get()))
         );
     }
 
@@ -59,10 +61,6 @@ public class BaseBox extends VBox {
 
     public IntegerProperty valueProperty() {
         return baseField.valueProperty();
-    }
-
-    public IntegerProperty exponentProperty() {
-        return exponentProperty;
     }
 
     public ReadOnlyObjectProperty<BigInteger> calculationProperty() {

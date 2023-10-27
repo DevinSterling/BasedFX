@@ -1,8 +1,12 @@
-package com.devinsterling.basedfx.control;
+package com.devinsterling.basedfx.ui.layout;
 
 import com.devinsterling.basedfx.consts.Default;
 
-import javafx.beans.property.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 

@@ -1,9 +1,9 @@
-package com.devinsterling.basedfx.control;
+package com.devinsterling.basedfx.ui.control;
 
 import com.devinsterling.basedfx.consts.Default;
 import com.devinsterling.basedfx.consts.Limit;
-import com.devinsterling.basedfx.control.textfield.LabeledBox;
-import com.devinsterling.basedfx.control.textfield.NumberField;
+import com.devinsterling.basedfx.util.ui.textfield.NumberField;
+import com.devinsterling.basedfx.util.ui.layout.LabeledBox;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;

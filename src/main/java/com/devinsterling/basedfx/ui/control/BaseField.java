@@ -1,9 +1,10 @@
-package com.devinsterling.basedfx.control;
+package com.devinsterling.basedfx.ui.control;
 
-import com.devinsterling.basedfx.control.textfield.ModifiedTextField;
+import com.devinsterling.basedfx.util.ui.textfield.ModifiedTextField;
 import com.devinsterling.basedfx.util.StringUtil;
 
-import javafx.beans.property.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.input.KeyCode;
 
 public class BaseField extends ModifiedTextField {
@@ -29,10 +30,8 @@ public class BaseField extends ModifiedTextField {
 
     private void setupActions() {
         setOnMousePressed(mouseEvent -> {
-            if (mouseEvent.isPrimaryButtonDown()) setOnMouseClicked(mouseEvent2 -> {
-                boolean isDragged = Math.abs(mouseEvent.getX()- mouseEvent2.getX()) > 10;
-
-                if (mouseEvent.getClickCount() == 1 && !isDragged && !isActive()) {
+            if (mouseEvent.isPrimaryButtonDown()) setOnMouseReleased(mouseEvent2 -> {
+                if (mouseEvent.getClickCount() == 1 && !isHighlighted()) {
                     getParent().requestFocus();
                     setText(String.valueOf((valueProperty.get() + 1) % baseProperty.get()));
                 }
@@ -43,14 +42,11 @@ public class BaseField extends ModifiedTextField {
     private void handleOnFocus(boolean isFocused) {
         if (!isFocused) {
             validateInput(false, "0", getText());
-            setStyle("");
             return;
         }
 
         // Retrieve text before edits in case user cancels.
         String inputBeforeChange = getText();
-
-        setStyle("-fx-cursor: text");
         setOnKeyPressed(keyEvent -> {
             KeyCode code = keyEvent.getCode();
             if (code == KeyCode.ENTER || code == KeyCode.ESCAPE) {

@@ -1,7 +1,8 @@
-package com.devinsterling.basedfx.control;
+package com.devinsterling.basedfx.ui.control;
 
 import com.devinsterling.basedfx.consts.Default;
 import com.devinsterling.basedfx.converter.BaseConverter;
+import com.devinsterling.basedfx.ui.layout.BaseBoxCollection;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
