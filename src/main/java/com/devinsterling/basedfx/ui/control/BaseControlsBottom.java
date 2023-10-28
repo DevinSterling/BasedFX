@@ -1,16 +1,19 @@
 package com.devinsterling.basedfx.ui.control;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import com.devinsterling.basedfx.util.ui.textfield.NumberField;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+import java.math.BigInteger;
+
 public class BaseControlsBottom extends HBox {
-    private final StringProperty resultProperty = new SimpleStringProperty();
+    private final ObjectProperty<BigInteger> resultProperty = new SimpleObjectProperty<>(BigInteger.ZERO);
     private final Button btnClearBoxes = new Button("Clear");
     private final Button btnClose = new Button("×");
 
@@ -21,25 +24,25 @@ public class BaseControlsBottom extends HBox {
     }
 
     private void build() {
-        Label lblResult = new Label();
+        NumberField result = new NumberField(BigInteger.ZERO, BigInteger.ZERO, null);
         HBox leftControls = new HBox(btnClose, btnClearBoxes);
 
         // Properties
-        lblResult.textProperty().bind(resultProperty);
+        result.valueProperty().bindBidirectional(resultProperty);
 
         // Children
-        setHgrow(leftControls, Priority.ALWAYS);
-        getChildren().addAll(leftControls, lblResult);
+        setHgrow(result, Priority.ALWAYS);
+        getChildren().addAll(leftControls, result);
 
         leftControls.getStyleClass().addAll("left-controls");
-        lblResult.getStyleClass().add("base-control-result");
+        result.getStyleClass().add("base-control-result");
         leftControls.getStyleClass().add("base-controls-left");
         btnClose.getStyleClass().addAll("base-control-button", "close-button");
         btnClearBoxes.getStyleClass().addAll("base-control-button", "clear-button");
         getStyleClass().addAll("base-controls", "base-controls-bottom");
     }
 
-    public StringProperty resultProperty() {
+    public ObjectProperty<BigInteger> resultProperty() {
         return resultProperty;
     }
 

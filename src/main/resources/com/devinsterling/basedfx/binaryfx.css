@@ -26,7 +26,7 @@
 
 .base-controls-bottom .base-control-button.clear-button {
     -fx-min-width: 4em;
-    -fx-pref-width: 8em;
+    -fx-pref-width: 6em;
 }
 
 .base-controls-bottom .base-control-button.close-button {
@@ -37,6 +37,9 @@
 .base-controls-bottom .base-control-result {
     -fx-font-weight: bold;
     -fx-font-size: 1.5em;
+    -fx-padding: 0;
+    -fx-alignment: center-right;
+    -fx-background-color: transparent;
 }
 
 .base-controls-top .base-control-base,
@@ -131,6 +134,7 @@
 }
 
 .context-menu {
+    -fx-font-weight: normal;
     -fx-font-size: 12pt;
 }
 

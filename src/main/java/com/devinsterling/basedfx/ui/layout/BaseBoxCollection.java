@@ -7,12 +7,15 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 
 import java.math.BigInteger;
 
 public class BaseBoxCollection extends HBox {
+    /**  Ensures that there is always at least {@code N} BaseBoxes upon their removal. */
+    private static final int MINIMUM_BOXES = 1;
     private final IntegerProperty baseProperty;
     private final ObjectProperty<BigInteger> sumProperty = new SimpleObjectProperty<>(BigInteger.ZERO);
 
@@ -21,12 +24,17 @@ public class BaseBoxCollection extends HBox {
 
         baseProperty = new SimpleIntegerProperty(base);
 
+        addListeners();
         build();
     }
 
     private void build() {
         addBaseBox(Default.BASE_FIELD_COUNT);
         getStyleClass().add("base-box-collection");
+    }
+
+    private void addListeners() {
+        getChildren().addListener((ListChangeListener<? super Node>) observable -> calculateSum());
     }
 
     private void calculateSum() {
@@ -83,8 +91,7 @@ public class BaseBoxCollection extends HBox {
     }
 
     public void removeBaseBox(int amount) {
-        // -1 ensures that there is always at least 1 BaseBox
-        amount = Math.min(amount, getChildren().size() - 1);
+        amount = Math.min(amount, getChildren().size() - MINIMUM_BOXES);
 
         for (int i = 0; i < amount; i++) {
             getChildren().removeFirst();

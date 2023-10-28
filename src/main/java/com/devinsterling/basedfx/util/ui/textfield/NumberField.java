@@ -2,63 +2,92 @@ package com.devinsterling.basedfx.util.ui.textfield;
 
 import com.devinsterling.basedfx.util.StringUtil;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+import java.math.BigInteger;
 
 public class NumberField extends ModifiedTextField {
-    private final IntegerProperty maxProperty = new SimpleIntegerProperty(Integer.MAX_VALUE);
-    private final IntegerProperty minProperty = new SimpleIntegerProperty(0);
-    private final IntegerProperty valueProperty;
+    private final ObjectProperty<BigInteger> valueProperty;
+    private final ObjectProperty<BigInteger> maxProperty = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<BigInteger> minProperty = new SimpleObjectProperty<>(null);
 
-    public NumberField(String s, int min, int max) {
-        super(s);
+    public NumberField(long value, long min, long max) {
+        this(BigInteger.valueOf(value), BigInteger.valueOf(min), BigInteger.valueOf(max));
+    }
+
+    public NumberField(BigInteger value, BigInteger min, BigInteger max) {
+        super();
+
+        valueProperty = new SimpleObjectProperty<>(min == null ? value : min);
 
         setMin(min);
         setMax(max);
-        valueProperty = new SimpleIntegerProperty(min);
-
-        validateInput(s);
+        setText(formatValue(value));
         addListeners();
     }
 
     private void addListeners() {
-        textProperty().addListener((observableValue, old, newInput) -> validateInput(newInput));
-        focusedProperty().addListener(((observableValue, old, isFocused) -> handleOnFocus(isFocused)));
+        valueProperty.addListener((observable, old, newValue) -> validateValue(old, newValue));
+        textProperty().addListener((observable, old, newInput) -> validateInput(newInput));
+        focusedProperty().addListener(((observable, old, isFocused) -> handleOnFocus(isFocused)));
     }
 
     private void handleOnFocus(boolean isFocused) {
         if (isFocused) return;
-        setText(String.valueOf(getText().isEmpty() ? minProperty.get() : valueProperty.get()));
+
+        // On loss of focus, revert to last valid value
+        setText(formatValue(valueProperty.get()));
+    }
+
+    private void validateValue(BigInteger oldValue, BigInteger newValue) {
+        if (isWithinBounds(newValue)) setText(formatValue(newValue));
+        else valueProperty.set(oldValue);
     }
 
     private void validateInput(String newInput) {
-        boolean isValidInput = false;
-        int value = minProperty.get();
+        String input = newInput.replace(",", "");
 
-        if (StringUtil.isNumeric(newInput)) {
-            value = Integer.parseInt(newInput);
-            isValidInput = value >= minProperty.get() && value <= maxProperty.get();
+        if (StringUtil.isNumeric(input)) {
+            BigInteger value = new BigInteger(input);
+
+            if (isWithinBounds(value)) valueProperty.set(value);
         }
-
-        if (isValidInput) valueProperty.set(value);
     }
 
-    public ReadOnlyIntegerProperty valueProperty() {
+    private boolean isWithinBounds(BigInteger value) {
+        BigInteger min = minProperty.get();
+        BigInteger max = maxProperty.get();
+
+        return min == null && max == null ||
+                min == null && value.compareTo(max) <= 0 ||
+                max == null && value.compareTo(min) >= 0 ||
+                min != null && max != null && value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
+    }
+
+    private String formatValue(BigInteger value) {
+        return String.format("%,d", value);
+    }
+
+    public ObjectProperty<BigInteger> valueProperty() {
         return valueProperty;
     }
 
     /** @param max value must be greater than {@code min} or 0 */
-    public void setMax(int max) {
-        if (max < minProperty.get()) throw new IllegalArgumentException(max + " < " + minProperty.get());
+    public void setMax(BigInteger max) {
+        if (maxProperty.get() != null && minProperty.get() != null && max.compareTo(minProperty.get()) < 0) {
+            throw new IllegalArgumentException(max + " < " + minProperty.get());
+        }
+
         maxProperty.set(max);
     }
 
     /** @param min value must be less than {@code max} and greater than 0 */
-    public void setMin(int min) {
-        min = Math.max(0, min);
+    public void setMin(BigInteger min) {
+        if (minProperty.get() != null && maxProperty.get() != null && min.compareTo(maxProperty.get()) > 0) {
+            throw new IllegalArgumentException(min + " > " + minProperty.get());
+        }
 
-        if (min > maxProperty.get()) throw new IllegalArgumentException(min + " > " + maxProperty.get());
         minProperty.set(min);
     }
 }

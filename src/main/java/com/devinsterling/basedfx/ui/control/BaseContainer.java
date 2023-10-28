@@ -39,11 +39,22 @@ public class BaseContainer extends BorderPane {
 
         // Listeners
         baseBoxes.minWidthProperty().bind(scrollPane.widthProperty().subtract(2));
-        controlsBottom.resultProperty().bind(collection.sumProperty().map(s -> String.format("%,d", s)));
+
+        // Listeners concerning base calculations
+        collection.sumProperty().addListener((observable, old, newSum) -> controlsBottom.resultProperty().set(newSum));
         controlsTop.baseProperty().addListener((observable, old, newBase) -> {
+            // Calculate new values for new base
             int[] values = baseConverter.convert(collection.sumProperty().get(), newBase.intValue());
             collection.baseProperty().set(newBase.intValue());
             collection.setValues(values);
+        });
+        controlsBottom.resultProperty().addListener((observable, old, newResult) -> {
+            // This listener is only intended for when the user
+            // changes the result through the `result` TextField
+            if (newResult.compareTo(collection.sumProperty().get()) == 0) return;
+
+            // Calculate new values for existing base
+            collection.setValues(baseConverter.convert(newResult, controlsTop.baseProperty().get()));
         });
 
         // Children

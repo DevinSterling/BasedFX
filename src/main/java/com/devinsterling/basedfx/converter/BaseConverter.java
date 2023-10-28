@@ -9,7 +9,8 @@ public class BaseConverter {
         BigInteger base = BigInteger.valueOf(targetBase);
         List<Integer> list = new ArrayList<>();
 
-        while (value.compareTo(BigInteger.ZERO) > 0) {
+        if (value.compareTo(BigInteger.ZERO) == 0) list.add(0);
+        else while (value.compareTo(BigInteger.ZERO) > 0) {
             list.addFirst(value.mod(base).intValue());
             value = value.divide(base);
         }

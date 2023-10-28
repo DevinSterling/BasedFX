@@ -30,9 +30,9 @@ public class BaseControlsTop extends HBox {
     }
 
     private void build() {
-        NumberField txtCurrentBase = new NumberField(String.valueOf(Default.BASE), Limit.MIN_BASE, Limit.MAX_BASE);
+        NumberField txtCurrentBase = new NumberField(Default.BASE, Limit.MIN_BASE, Limit.MAX_BASE);
         NumberField txtBaseBoxStep = new NumberField(
-            String.valueOf(Limit.MIN_ADD_BASE_BOX),
+            Limit.MIN_ADD_BASE_BOX,
             Limit.MIN_ADD_BASE_BOX,
             Limit.MAX_ADD_BASE_BOX
         );

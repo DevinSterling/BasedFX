@@ -16,6 +16,10 @@ import javafx.scene.control.TextField;
 public class ModifiedTextField extends TextField {
     private final BooleanProperty highlightedProperty = new SimpleBooleanProperty(false);
 
+    public ModifiedTextField() {
+        this("");
+    }
+
     public ModifiedTextField(String s) {
         super(s);
 
